@@ -67,6 +67,33 @@ h1 {
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
 }
 
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.tab-button {
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid #cbd5f5;
+  background: #eef2ff;
+  color: #312e81;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab-button[aria-selected='true'] {
+  background: #4c1d95;
+  color: #ffffff;
+  border-color: #4c1d95;
+}
+
+.tab-button:hover {
+  transform: translateY(-1px);
+}
+
 .prompt-block {
   display: flex;
   flex-direction: column;
@@ -111,7 +138,7 @@ textarea:focus {
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
 }
 
-button {
+.prompt-block button {
   align-self: flex-start;
   padding: 12px 20px;
   border-radius: 999px;
@@ -123,12 +150,12 @@ button {
   transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-button:hover:not(:disabled) {
+.prompt-block button:hover:not(:disabled) {
   opacity: 0.9;
   transform: translateY(-1px);
 }
 
-button:disabled {
+.prompt-block button:disabled {
   background: #c7c8e1;
   cursor: not-allowed;
 }

@@ -1,22 +1,34 @@
 import { useEffect, useRef, useState } from 'react'
 import './App.css'
 
-const buildPrompt = (word: string) =>
+type TabMode = 'english' | 'japanese'
+
+const buildEnglishPrompt = (word: string) =>
   `What's the etymology of the word ${word}? What's the other words having same etymology with word ${word}? Do native speakers always use them or not?`
+
+const buildJapanesePrompt = (word: string) =>
+  `${word}という言葉の意味はなんですか英語で解釈してください。その言葉の由来はどういう言葉？日本人によく使われますか？`
 
 const emptyStateText =
   "Type a word above and we'll build the full question for your AI assistant."
 
 function App() {
-  const [word, setWord] = useState('')
+  const [mode, setMode] = useState<TabMode>('english')
+  const [englishWord, setEnglishWord] = useState('')
+  const [japaneseWord, setJapaneseWord] = useState('')
   const [copied, setCopied] = useState(false)
   const [copyError, setCopyError] = useState<string | null>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const timeoutRef = useRef<number | null>(null)
 
+  const word = mode === 'english' ? englishWord : japaneseWord
+  const setWord = mode === 'english' ? setEnglishWord : setJapaneseWord
   const sanitizedWord = word.trim()
   const hasWord = sanitizedWord.length > 0
-  const questionText = buildPrompt(sanitizedWord)
+  const questionText =
+    mode === 'english'
+      ? buildEnglishPrompt(sanitizedWord)
+      : buildJapanesePrompt(sanitizedWord)
   const promptText = hasWord ? questionText : emptyStateText
 
   useEffect(() => {
@@ -66,12 +78,36 @@ function App() {
         </header>
 
         <label className="field">
+          <span>Mode</span>
+          <div className="tabs" role="tablist" aria-label="Prompt language mode">
+            <button
+              type="button"
+              role="tab"
+              className="tab-button"
+              aria-selected={mode === 'english'}
+              onClick={() => setMode('english')}
+            >
+              English words
+            </button>
+            <button
+              type="button"
+              role="tab"
+              className="tab-button"
+              aria-selected={mode === 'japanese'}
+              onClick={() => setMode('japanese')}
+            >
+              Japanese words
+            </button>
+          </div>
+        </label>
+
+        <label className="field">
           <span>Word</span>
           <input
             type="text"
             value={word}
             onChange={(event) => setWord(event.target.value)}
-            placeholder="ecstatic"
+            placeholder={mode === 'english' ? 'ecstatic' : 'アドリブ'}
             aria-label="Word you want to research"
             autoFocus
           />
