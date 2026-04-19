@@ -1,13 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
 import './App.css'
 
-type TabMode = 'english' | 'japanese'
+type TabMode = 'english' | 'japanese' | 'collocation'
 
 const buildEnglishPrompt = (word: string) =>
   `What's the etymology of the word ${word}? What's the other words having same etymology with word ${word}? Do native speakers always use them or not?`
 
 const buildJapanesePrompt = (word: string) =>
   `${word}という言葉の意味はなんですか英語で解釈してください。その言葉の由来はどういう言葉？日本人によく使われますか？`
+
+const buildCollocationPrompt = (word: string) =>
+  `What's the meaning of the collocation '${word}'? Why it's the meaning? Do native speakers always use it?`
 
 const emptyStateText =
   "Type a word above and we'll build the full question for your AI assistant."
@@ -16,19 +19,28 @@ function App() {
   const [mode, setMode] = useState<TabMode>('english')
   const [englishWord, setEnglishWord] = useState('')
   const [japaneseWord, setJapaneseWord] = useState('')
+  const [collocationWord, setCollocationWord] = useState('')
   const [copied, setCopied] = useState(false)
   const [copyError, setCopyError] = useState<string | null>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const timeoutRef = useRef<number | null>(null)
 
-  const word = mode === 'english' ? englishWord : japaneseWord
-  const setWord = mode === 'english' ? setEnglishWord : setJapaneseWord
+  const word =
+    mode === 'english' ? englishWord : mode === 'japanese' ? japaneseWord : collocationWord
+  const setWord =
+    mode === 'english'
+      ? setEnglishWord
+      : mode === 'japanese'
+        ? setJapaneseWord
+        : setCollocationWord
   const sanitizedWord = word.trim()
   const hasWord = sanitizedWord.length > 0
   const questionText =
     mode === 'english'
       ? buildEnglishPrompt(sanitizedWord)
-      : buildJapanesePrompt(sanitizedWord)
+      : mode === 'japanese'
+        ? buildJapanesePrompt(sanitizedWord)
+        : buildCollocationPrompt(sanitizedWord)
   const promptText = hasWord ? questionText : emptyStateText
 
   useEffect(() => {
@@ -98,6 +110,15 @@ function App() {
             >
               Japanese words
             </button>
+            <button
+              type="button"
+              role="tab"
+              className="tab-button"
+              aria-selected={mode === 'collocation'}
+              onClick={() => setMode('collocation')}
+            >
+              Collocation
+            </button>
           </div>
         </label>
 
@@ -107,7 +128,13 @@ function App() {
             type="text"
             value={word}
             onChange={(event) => setWord(event.target.value)}
-            placeholder={mode === 'english' ? 'ecstatic' : 'アドリブ'}
+            placeholder={
+              mode === 'english'
+                ? 'ecstatic'
+                : mode === 'japanese'
+                  ? 'アドリブ'
+                  : 'stay the course'
+            }
             aria-label="Word you want to research"
             autoFocus
           />
