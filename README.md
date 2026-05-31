@@ -1,8 +1,42 @@
-# React + TypeScript + Vite
+# React + TypeScript + Vite (with Bun)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules, powered by **Bun**.
 
-Currently, two official plugins are available:
+## Getting Started
+
+First, ensure you have [Bun](https://bun.sh/) installed.
+
+### Installation
+
+```bash
+bun install
+```
+
+### Development
+
+```bash
+bun dev
+```
+
+### Build
+
+```bash
+bun build
+```
+
+### Lint
+
+```bash
+bun lint
+```
+
+### Preview
+
+```bash
+bun preview
+```
+
+## Features
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
